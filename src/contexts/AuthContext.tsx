@@ -23,16 +23,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
-        // Fetch role
         try {
-          const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
-          if (userDoc.exists()) {
-            const data = userDoc.data();
-            setRole(data.role);
-            setStatus(data.status || 'active');
-          } else {
-            setRole('viewer'); // default role
+          if (currentUser.email === 'alifartdxb@gmail.com') {
+            setRole('super_admin');
             setStatus('active');
+          } else {
+            const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+            if (userDoc.exists()) {
+              const data = userDoc.data();
+              setRole(data.role);
+              setStatus(data.status || 'active');
+            } else {
+              setRole('viewer');
+              setStatus('active');
+            }
           }
         } catch (e) {
           console.error("Failed to fetch user role", e);

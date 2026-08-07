@@ -29,9 +29,10 @@ export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
     return <Navigate to="/admin/login" state={{ from: location, error: "Your account has been deactivated." }} replace />;
   }
 
-  if (allowedRoles && role) {
+  if (allowedRoles) {
+    const userRole = role ? (Array.isArray(role) ? role[0] : role) : 'viewer';
     // super_admin always has access
-    if (role !== 'super_admin' && !allowedRoles.includes(role)) {
+    if (userRole !== 'super_admin' && !allowedRoles.includes(userRole as string)) {
       return <Unauthorized />;
     }
   }
