@@ -45,6 +45,21 @@ const AdminUsers = lazy(() => import("./pages/admin/AdminUsers").then(module => 
 const AdminGeneric = lazy(() => import("./pages/admin/AdminGeneric").then(module => ({ default: module.AdminGeneric })));
 const AdminLeads = lazy(() => import("./pages/admin/AdminLeads").then(module => ({ default: module.AdminLeads })));
 
+const AdminProjects = lazy(() => import("./pages/admin/projects/AdminProjects").then(module => ({ default: module.AdminProjects })));
+const AdminProjectForm = lazy(() => import("./pages/admin/projects/AdminProjectForm").then(module => ({ default: module.AdminProjectForm })));
+const AdminBlogForm = lazy(() => import("./pages/admin/blogs/AdminBlogForm").then(module => ({ default: module.AdminBlogForm })));
+const AdminFAQs = lazy(() => import("./pages/admin/AdminFAQs").then(module => ({ default: module.AdminFAQs })));
+const AdminCareers = lazy(() => import("./pages/admin/AdminCareers").then(module => ({ default: module.AdminCareers })));
+
+const Projects = lazy(() => import("./pages/Projects").then(module => ({ default: module.Projects })));
+const ProjectDetail = lazy(() => import("./pages/ProjectDetail").then(module => ({ default: module.ProjectDetail })));
+const FAQs = lazy(() => import("./pages/FAQs").then(module => ({ default: module.FAQs })));
+const Careers = lazy(() => import("./pages/Careers").then(module => ({ default: module.Careers })));
+const ProductFinder = lazy(() => import("./pages/ProductFinder").then(module => ({ default: module.ProductFinder })));
+const ProductComparison = lazy(() => import("./pages/ProductComparison").then(module => ({ default: module.ProductComparison })));
+
+
+
 const PageLoader = () => (
   <div className="flex items-center justify-center min-h-screen">
     <div className="w-8 h-8 border-4 border-stone-200 border-t-brand-primary rounded-full animate-spin"></div>
@@ -68,6 +83,8 @@ export default function App() {
                 {/* Content Manager + SEO Manager */}
                 <Route element={<ProtectedRoute allowedRoles={['content_manager', 'seo_manager']} />}>
                   <Route path="blogs" element={<AdminBlogs />} />
+                  <Route path="blogs/add" element={<AdminBlogForm />} />
+                  <Route path="blogs/edit/:id" element={<AdminBlogForm />} />
                   <Route path="pages" element={<AdminGeneric />} />
                 </Route>
 
@@ -88,10 +105,12 @@ export default function App() {
                   <Route path="catalogues/edit/:id" element={<AdminCatalogueForm />} />
                   <Route path="catalogues/import" element={<AdminCatalogueImport />} />
                   <Route path="media" element={<AdminGeneric />} />
-                  <Route path="projects" element={<AdminGeneric />} />
+                  <Route path="projects" element={<AdminProjects />} />
+                  <Route path="projects/add" element={<AdminProjectForm />} />
+                  <Route path="projects/edit/:id" element={<AdminProjectForm />} />
                   <Route path="gallery" element={<AdminGeneric />} />
                   <Route path="videos" element={<AdminGeneric />} />
-                  <Route path="faqs" element={<AdminGeneric />} />
+                  <Route path="faqs" element={<AdminFAQs />} />
                 </Route>
 
                 {/* Sales Manager */}
@@ -115,7 +134,7 @@ export default function App() {
                   <Route path="system" element={<AdminSystem />} />
                   <Route path="users" element={<AdminUsers />} />
                   <Route path="team" element={<AdminGeneric />} />
-                  <Route path="careers" element={<AdminGeneric />} />
+                  <Route path="careers" element={<AdminCareers />} />
                   <Route path="emails" element={<AdminGeneric />} />
                   <Route path="menus" element={<AdminGeneric />} />
                   <Route path="integrations" element={<AdminGeneric />} />
@@ -138,6 +157,12 @@ export default function App() {
               <Route path="brands/:brandSlug" element={<BrandDetail />} />
               
               <Route path="vado-collection" element={<VadoCollection />} />
+              <Route path="projects" element={<Projects />} />
+              <Route path="projects/:slug" element={<ProjectDetail />} />
+              <Route path="faqs" element={<FAQs />} />
+              <Route path="careers" element={<Careers />} />
+              <Route path="product-finder" element={<ProductFinder />} />
+              <Route path="compare" element={<ProductComparison />} />
               <Route path="sitemap" element={<SitemapViewer />} />
               <Route path="contact" element={<Contact />} />
           <Route path="book-showroom" element={<BookShowroom />} />

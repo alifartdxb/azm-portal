@@ -229,7 +229,7 @@ export function AdminCatalogues() {
                       <div>
                         <p className="font-bold text-stone-800 text-sm mb-1">{catalogue.title}</p>
                         <div className="flex items-center gap-2 text-xs text-stone-500">
-                          {catalogue.year && <span>{catalogue.year}</span>}
+                          {catalogue.year && <span>{catalogue.year}</span>} {catalogue.visibility && <><span className="w-1 h-1 bg-stone-300 rounded-full" /><span>{catalogue.visibility}</span></>}
                           {catalogue.language && (
                             <>
                               <span className="w-1 h-1 bg-stone-300 rounded-full" />

@@ -289,6 +289,11 @@ export function Layout() {
              <h4 className="text-white font-semibold uppercase tracking-wider mb-6">Quick Links</h4>
              <ul className="space-y-3 text-sm">
                <li><Link to="/about" className="hover:text-white transition-colors">Corporate Profile</Link></li>
+               <li><Link to="/product-finder" className="hover:text-white transition-colors">Product Finder</Link></li>
+               <li><Link to="/compare" className="hover:text-white transition-colors">Compare Products</Link></li>
+               <li><Link to="/projects" className="hover:text-white transition-colors">Our Projects</Link></li>
+               <li><Link to="/careers" className="hover:text-white transition-colors">Careers</Link></li>
+               <li><Link to="/faqs" className="hover:text-white transition-colors">FAQs</Link></li>
                <li><Link to="/vado-collection" className="hover:text-white transition-colors">VADO UK Collection</Link></li>
                <li><Link to="/catalogues" className="hover:text-white transition-colors">Download Catalogues</Link></li>
                <li><Link to="/contact" className="hover:text-white transition-colors">Showroom Locator</Link></li>

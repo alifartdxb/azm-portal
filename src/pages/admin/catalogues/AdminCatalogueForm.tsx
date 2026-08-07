@@ -24,7 +24,8 @@ export function AdminCatalogueForm() {
     title: '',
     slug: '',
     brand: '',
-    category: '',
+    category: 'Catalogue',
+    visibility: 'Public',
     productType: '',
     description: '',
     year: new Date().getFullYear().toString(),
@@ -112,7 +113,7 @@ export function AdminCatalogueForm() {
         // Reset form for "Save & Add Another"
         if (!isEdit) {
           setFormData({
-            title: '', slug: '', brand: '', category: '', productType: '', description: '',
+            title: '', slug: '', brand: '', category: 'Catalogue', visibility: 'Public', productType: '', description: '',
             year: new Date().getFullYear().toString(), language: 'English', pages: '', fileSize: '', tags: '',
             thumbnail: '', pdfUrl: '', seoTitle: '', metaDescription: ''
           });
