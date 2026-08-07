@@ -1,21 +1,35 @@
 export interface Brand {
   id: string;
   name: string;
+  nameAr?: string;
   slug: string;
   logo: string;
   banner: string;
   country: string;
+  countryAr?: string;
   description: string;
+  descriptionAr?: string;
   seoTitle: string;
   seoDescription: string;
   isFeatured: boolean;
+  catalogues?: Document[];
+  faqs?: { question: string; answer: string }[];
 }
 
 export interface Category {
   id: string;
   name: string;
+  nameAr?: string;
   slug: string;
+  description?: string;
+  descriptionAr?: string;
   image: string;
+  banner?: string;
+  parentId?: string;
+  applications?: string[];
+  faqs?: { question: string; answer: string }[];
+  seoTitle?: string;
+  seoDescription?: string;
 }
 
 export interface Document {

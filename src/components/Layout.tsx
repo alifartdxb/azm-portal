@@ -30,6 +30,10 @@ export function Layout() {
   const navigation = [
     { name: "About Us", path: "/about" },
     { 
+      name: "Categories", 
+      path: "/categories",
+    },
+    { 
       name: "Products", 
       path: "/products",
       megaMenu: "products"

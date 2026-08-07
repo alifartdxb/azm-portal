@@ -7,6 +7,8 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 const Home = lazy(() => import("./pages/Home").then(module => ({ default: module.Home })));
 const Products = lazy(() => import("./pages/Products").then(module => ({ default: module.Products })));
 const ProductDetail = lazy(() => import("./pages/ProductDetail").then(module => ({ default: module.ProductDetail })));
+const Categories = lazy(() => import("./pages/Categories").then(module => ({ default: module.Categories })));
+const CategoryDetail = lazy(() => import("./pages/CategoryDetail").then(module => ({ default: module.CategoryDetail })));
 const Brands = lazy(() => import("./pages/Brands").then(module => ({ default: module.Brands })));
 const BrandDetail = lazy(() => import("./pages/BrandDetail").then(module => ({ default: module.BrandDetail })));
 const VadoCollection = lazy(() => import("./pages/VadoCollection").then(module => ({ default: module.VadoCollection })));
@@ -83,6 +85,8 @@ export default function App() {
               {/* Fallback for old routes or generic search */}
               <Route path="products/:sku" element={<ProductDetail />} />
               
+              <Route path="categories" element={<Categories />} />
+              <Route path="categories/:categorySlug" element={<CategoryDetail />} />
               <Route path="brands" element={<Brands />} />
               <Route path="brands/:brandSlug" element={<BrandDetail />} />
               

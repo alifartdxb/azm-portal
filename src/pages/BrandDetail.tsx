@@ -88,12 +88,22 @@ export function BrandDetail() {
             <h1 className="text-4xl md:text-6xl font-bold font-display text-white mb-4">
               {brand.name}
             </h1>
+            {brand.nameAr && (
+              <h2 className="text-2xl md:text-4xl font-arabic text-stone-300 mb-4">
+                {brand.nameAr}
+              </h2>
+            )}
             <p className="text-sm font-bold uppercase tracking-widest text-brand-primary mb-6">
-              Origin: {brand.country}
+              Origin: {brand.country} {brand.countryAr ? `| ${brand.countryAr}` : ''}
             </p>
-            <p className="text-lg text-stone-200 leading-relaxed mb-10 font-light">
+            <p className="text-lg text-stone-200 leading-relaxed mb-4 font-light">
               {brand.description}
             </p>
+            {brand.descriptionAr && (
+              <p className="text-lg text-stone-300 leading-relaxed mb-10 font-arabic text-right" dir="rtl">
+                {brand.descriptionAr}
+              </p>
+            )}
             <div className="flex flex-col sm:flex-row gap-4">
               <a href="#products" className="inline-flex items-center justify-center gap-2 bg-brand-primary text-white px-8 py-4 rounded-full font-bold uppercase tracking-wider hover:bg-brand-secondary transition-all hover:shadow-lg hover:-translate-y-1">
                 Explore Products <ArrowRight size={18} />
@@ -101,6 +111,9 @@ export function BrandDetail() {
               <Link to={`/contact?tab=quote&brand=${brand.slug}`} className="inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-md text-white border border-white/20 px-8 py-4 rounded-full font-bold uppercase tracking-wider hover:bg-white hover:text-brand-secondary transition-all hover:shadow-lg hover:-translate-y-1">
                 Request Quote <FileText size={18} />
               </Link>
+              <a href={`https://wa.me/971500000000?text=I am interested in ${brand.name}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-green-500 text-white px-8 py-4 rounded-full font-bold uppercase tracking-wider hover:bg-green-600 transition-all hover:shadow-lg hover:-translate-y-1">
+                WhatsApp <MessageSquare size={18} />
+              </a>
             </div>
           </motion.div>
         </div>

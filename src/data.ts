@@ -1,186 +1,230 @@
-import { Brand, Category, Product, ProductCatalog } from './types';
+import { Brand, Category, Product, Document } from './types';
 
 export const BRANDS_DATA: Brand[] = [
   {
     id: "b1",
     name: "VADO",
+    nameAr: "فادو",
     slug: "vado",
     logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Vado_Logo.svg/1200px-Vado_Logo.svg.png",
     banner: "https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=2000&auto=format&fit=crop",
     country: "United Kingdom",
+    countryAr: "المملكة المتحدة",
     description: "VADO is a leading British bathroom brassware manufacturer renowned for its uncompromising quality, striking designs and technical innovation.",
+    descriptionAr: "فادو هي شركة بريطانية رائدة في تصنيع أدوات الحمام النحاسية، تشتهر بجودتها وتصميماتها الرائعة وابتكارها التقني.",
     seoTitle: "VADO Bathroom Products UAE | AZM Group",
     seoDescription: "Explore premium VADO bathroom fittings, mixers and shower systems available from AZM Group Dubai.",
-    isFeatured: true
+    isFeatured: true,
+    faqs: [
+      { question: "Where is VADO manufactured?", answer: "VADO products are designed and engineered in the UK." }
+    ]
   },
   {
     id: "b2",
-    name: "JAQUAR",
+    name: "Jaquar",
+    nameAr: "جاكوار",
     slug: "jaquar",
     logo: "https://via.placeholder.com/300x100/ffffff/000000?text=JAQUAR",
     banner: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=2000&auto=format&fit=crop",
     country: "India",
+    countryAr: "الهند",
     description: "Jaquar is a leading complete bathroom and lighting solutions brand, offering an extensive range of products.",
+    descriptionAr: "جاكوار هي علامة تجارية رائدة في حلول الحمامات والإضاءة الشاملة.",
     seoTitle: "JAQUAR Bathroom Solutions UAE | AZM Group",
     seoDescription: "Premium Jaquar sanitary ware, fittings and wellness products at AZM Group Dubai.",
     isFeatured: true
   },
   {
     id: "b3",
-    name: "ITALIAN STANDARDS",
-    slug: "italian-standards",
-    logo: "https://via.placeholder.com/300x100/ffffff/000000?text=ITALIAN+STANDARDS",
+    name: "RAK Ceramics",
+    nameAr: "سيراميك رأس الخيمة",
+    slug: "rak-ceramics",
+    logo: "https://via.placeholder.com/300x100/ffffff/000000?text=RAK+CERAMICS",
     banner: "https://images.unsplash.com/photo-1507652313519-d4e9174296fc?q=80&w=2000&auto=format&fit=crop",
-    country: "Italy",
-    description: "Luxury Italian sanitaryware and bathroom furniture known for exceptional design and quality.",
-    seoTitle: "Italian Standards Sanitaryware | AZM Group",
-    seoDescription: "Exquisite Italian Standards bathroom products available in Dubai, UAE.",
-    isFeatured: false
+    country: "UAE",
+    countryAr: "الإمارات العربية المتحدة",
+    description: "RAK Ceramics is one of the largest ceramics brands in the world, specializing in ceramic and gres porcelain wall and floor tiles, tableware, sanitaryware and faucets.",
+    descriptionAr: "سيراميك رأس الخيمة هي واحدة من أكبر العلامات التجارية للسيراميك في العالم.",
+    seoTitle: "RAK Ceramics | Tiles & Sanitaryware UAE",
+    seoDescription: "Discover RAK Ceramics premium tiles and sanitaryware at AZM Group Dubai.",
+    isFeatured: true
   },
-  { id: "b4", name: "NOURK", slug: "nourk", logo: "https://via.placeholder.com/300x100/ffffff/000000?text=NOURK", banner: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?q=80&w=2000", country: "Global", description: "Premium bathroom essentials.", seoTitle: "NOURK Bathroom Essentials", seoDescription: "NOURK brand products.", isFeatured: false },
-  { id: "b5", name: "SANIT", slug: "sanit", logo: "https://via.placeholder.com/300x100/ffffff/000000?text=SANIT", banner: "https://images.unsplash.com/photo-1504307651254-35680f356f90?q=80&w=2000", country: "Germany", description: "Concealed systems and flushing technology.", seoTitle: "Sanit Flushing Systems UAE", seoDescription: "German engineered concealed flushing systems.", isFeatured: false },
-  { id: "b6", name: "SONET", slug: "sonet", logo: "https://via.placeholder.com/300x100/ffffff/000000?text=SONET", banner: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=2000", country: "Global", description: "Quality sanitary solutions.", seoTitle: "Sonet Sanitaryware", seoDescription: "Quality sanitary solutions.", isFeatured: false },
-  { id: "b7", name: "ROMAN", slug: "roman", logo: "https://via.placeholder.com/300x100/ffffff/000000?text=ROMAN", banner: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=2000", country: "United Kingdom", description: "Leading designer and manufacturer of shower enclosures.", seoTitle: "Roman Showers UAE | AZM Group", seoDescription: "Roman Shower enclosures and bath screens in UAE.", isFeatured: true },
-  { id: "b8", name: "KLUDI RAK", slug: "kludi-rak", logo: "https://via.placeholder.com/300x100/ffffff/000000?text=KLUDI+RAK", banner: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2000", country: "UAE/Germany", description: "Joint venture producing high-quality bathroom fittings.", seoTitle: "Kludi RAK Mixers | AZM Group", seoDescription: "Kludi RAK bathroom and kitchen fittings.", isFeatured: false }
+  { 
+    id: "b4", 
+    name: "KLUDI RAK", 
+    nameAr: "كلودي راك",
+    slug: "kludi-rak", 
+    logo: "https://via.placeholder.com/300x100/ffffff/000000?text=KLUDI+RAK", 
+    banner: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2000", 
+    country: "UAE/Germany", 
+    countryAr: "الإمارات/ألمانيا",
+    description: "Joint venture producing high-quality bathroom fittings blending German technology with UAE manufacturing.", 
+    descriptionAr: "مشروع مشترك ينتج تجهيزات حمامات عالية الجودة يجمع بين التكنولوجيا الألمانية والتصنيع الإماراتي.",
+    seoTitle: "Kludi RAK Mixers | AZM Group", 
+    seoDescription: "Kludi RAK bathroom and kitchen fittings.", 
+    isFeatured: true 
+  },
+  { 
+    id: "b5", 
+    name: "Italian Standard", 
+    nameAr: "إيتاليان ستاندرد",
+    slug: "italian-standard", 
+    logo: "https://via.placeholder.com/300x100/ffffff/000000?text=ITALIAN+STANDARD", 
+    banner: "https://images.unsplash.com/photo-1507652313519-d4e9174296fc?q=80&w=2000&auto=format&fit=crop", 
+    country: "Italy", 
+    countryAr: "إيطاليا",
+    description: "Luxury Italian sanitaryware and bathroom furniture known for exceptional design and quality.", 
+    descriptionAr: "أدوات صحية وأثاث حمامات إيطالي فاخر معروف بالتصميم والجودة الاستثنائية.",
+    seoTitle: "Italian Standard Sanitaryware | AZM Group", 
+    seoDescription: "Exquisite Italian Standard bathroom products available in Dubai, UAE.", 
+    isFeatured: false 
+  },
+  { 
+    id: "b6", 
+    name: "SANIT", 
+    nameAr: "سانيت",
+    slug: "sanit", 
+    logo: "https://via.placeholder.com/300x100/ffffff/000000?text=SANIT", 
+    banner: "https://images.unsplash.com/photo-1504307651254-35680f356f90?q=80&w=2000", 
+    country: "Germany", 
+    countryAr: "ألمانيا",
+    description: "German engineered concealed systems and flushing technology.", 
+    descriptionAr: "أنظمة مخفية وتقنية طرد هندسية ألمانية.",
+    seoTitle: "Sanit Flushing Systems UAE", 
+    seoDescription: "German engineered concealed flushing systems.", 
+    isFeatured: true 
+  },
+  { 
+    id: "b7", 
+    name: "NOURK", 
+    nameAr: "نورك",
+    slug: "nourk", 
+    logo: "https://via.placeholder.com/300x100/ffffff/000000?text=NOURK", 
+    banner: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?q=80&w=2000", 
+    country: "Global", 
+    countryAr: "عالمي",
+    description: "Premium bathroom essentials.", 
+    descriptionAr: "أساسيات الحمام الفاخرة.",
+    seoTitle: "NOURK Bathroom Essentials", 
+    seoDescription: "NOURK brand products.", 
+    isFeatured: false 
+  },
+  { 
+    id: "b8", 
+    name: "SONET", 
+    nameAr: "سونيت",
+    slug: "sonet", 
+    logo: "https://via.placeholder.com/300x100/ffffff/000000?text=SONET", 
+    banner: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=2000", 
+    country: "Global", 
+    countryAr: "عالمي",
+    description: "Quality sanitary solutions.", 
+    descriptionAr: "حلول صحية عالية الجودة.",
+    seoTitle: "Sonet Sanitaryware", 
+    seoDescription: "Quality sanitary solutions.", 
+    isFeatured: false 
+  },
+  { 
+    id: "b9", 
+    name: "ROMAN", 
+    nameAr: "رومان",
+    slug: "roman", 
+    logo: "https://via.placeholder.com/300x100/ffffff/000000?text=ROMAN", 
+    banner: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=2000", 
+    country: "United Kingdom", 
+    countryAr: "المملكة المتحدة",
+    description: "Leading designer and manufacturer of shower enclosures.", 
+    descriptionAr: "مصمم ومصنع رائد لكبائن الاستحمام.",
+    seoTitle: "Roman Showers UAE | AZM Group", 
+    seoDescription: "Roman Shower enclosures and bath screens in UAE.", 
+    isFeatured: true 
+  }
 ];
 
 export const CATEGORIES_DATA: Category[] = [
-  { id: "c1", name: "Bathroom Mixers", slug: "mixers", image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=400&auto=format&fit=crop" },
-  { id: "c2", name: "Shower Systems", slug: "shower-systems", image: "https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=400&auto=format&fit=crop" },
-  { id: "c3", name: "Kitchen Taps", slug: "kitchen-taps", image: "https://images.unsplash.com/photo-1556910103-1c02745a872f?q=80&w=400&auto=format&fit=crop" },
-  { id: "c4", name: "Accessories", slug: "accessories", image: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=400&auto=format&fit=crop" },
-  { id: "c5", name: "Wash Basins", slug: "wash-basins", image: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?q=80&w=400&auto=format&fit=crop" },
-  { id: "c6", name: "Bathtubs", slug: "bathtubs", image: "https://images.unsplash.com/photo-1507652313519-d4e9174996cb?q=80&w=400&auto=format&fit=crop" }
+  { id: "c1", name: "Tiles", nameAr: "بلاط", slug: "tiles", description: "Premium ceramic and porcelain tiles.", descriptionAr: "بلاط سيراميك وبورسلين فاخر.", image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=400&auto=format&fit=crop", banner: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=2000&auto=format&fit=crop" },
+  { id: "c2", name: "Slabs", nameAr: "ألواح", slug: "slabs", description: "Large format porcelain and stone slabs.", descriptionAr: "ألواح بورسلين وحجر كبيرة الحجم.", image: "https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=400&auto=format&fit=crop", banner: "https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=2000&auto=format&fit=crop" },
+  { id: "c3", name: "Marble", nameAr: "رخام", slug: "marble", description: "Natural marble tiles and slabs.", descriptionAr: "بلاط وألواح رخام طبيعي.", image: "https://images.unsplash.com/photo-1556910103-1c02745a872f?q=80&w=400&auto=format&fit=crop", banner: "https://images.unsplash.com/photo-1556910103-1c02745a872f?q=80&w=2000&auto=format&fit=crop" },
+  { id: "c4", name: "Porcelain", nameAr: "بورسلين", slug: "porcelain", description: "Durable porcelain tiles for floors and walls.", descriptionAr: "بلاط بورسلين متين للأرضيات والجدران.", image: "https://images.unsplash.com/photo-1507652313519-d4e9174296fc?q=80&w=400&auto=format&fit=crop", banner: "https://images.unsplash.com/photo-1507652313519-d4e9174296fc?q=80&w=2000&auto=format&fit=crop" },
+  { id: "c5", name: "Sanitary Ware", nameAr: "أدوات صحية", slug: "sanitary-ware", description: "High-quality sanitary ware products.", descriptionAr: "منتجات أدوات صحية عالية الجودة.", image: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?q=80&w=400&auto=format&fit=crop", banner: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?q=80&w=2000&auto=format&fit=crop" },
+  { id: "c6", name: "Mixers & Faucets", nameAr: "خلاطات وصنابير", slug: "mixers-and-faucets", description: "Premium bathroom and kitchen mixers.", descriptionAr: "خلاطات حمامات ومطابخ فاخرة.", image: "https://images.unsplash.com/photo-1504307651254-35680f356f90?q=80&w=400&auto=format&fit=crop", banner: "https://images.unsplash.com/photo-1504307651254-35680f356f90?q=80&w=2000&auto=format&fit=crop" },
+  { id: "c7", name: "Shower Systems", nameAr: "أنظمة دش", slug: "shower-systems", description: "Advanced shower systems and enclosures.", descriptionAr: "أنظمة وكبائن دش متطورة.", image: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=400&auto=format&fit=crop", banner: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=2000&auto=format&fit=crop" },
+  { id: "c8", name: "Bathtubs", nameAr: "أحواض استحمام", slug: "bathtubs", description: "Freestanding and built-in bathtubs.", descriptionAr: "أحواض استحمام قائمة بذاتها ومدمجة.", image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=400&auto=format&fit=crop", banner: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2000&auto=format&fit=crop" },
+  { id: "c9", name: "Bathroom Accessories", nameAr: "إكسسوارات حمام", slug: "bathroom-accessories", description: "Essential bathroom accessories.", descriptionAr: "إكسسوارات حمام أساسية.", image: "https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=400&auto=format&fit=crop", banner: "https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=2000&auto=format&fit=crop" },
+  { id: "c10", name: "Water Closets", nameAr: "مراحيض", slug: "water-closets", description: "Wall-hung and floor-standing water closets.", descriptionAr: "مراحيض معلقة على الحائط وقائمة على الأرض.", image: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=400&auto=format&fit=crop", banner: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=2000&auto=format&fit=crop" },
+  { id: "c11", name: "Building Materials", nameAr: "مواد بناء", slug: "building-materials", description: "Essential building and construction materials.", descriptionAr: "مواد بناء وتشييد أساسية.", image: "https://images.unsplash.com/photo-1507652313519-d4e9174296fc?q=80&w=400&auto=format&fit=crop", banner: "https://images.unsplash.com/photo-1507652313519-d4e9174296fc?q=80&w=2000&auto=format&fit=crop" },
+  { id: "c12", name: "Hardware", nameAr: "أجهزة", slug: "hardware", description: "Architectural hardware and fittings.", descriptionAr: "أجهزة وتجهيزات معمارية.", image: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?q=80&w=400&auto=format&fit=crop", banner: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?q=80&w=2000&auto=format&fit=crop" },
+  { id: "c13", name: "Adhesives", nameAr: "مواد لاصقة", slug: "adhesives", description: "High-performance tile adhesives and grouts.", descriptionAr: "مواد لاصقة وجص بلاط عالية الأداء.", image: "https://images.unsplash.com/photo-1504307651254-35680f356f90?q=80&w=400&auto=format&fit=crop", banner: "https://images.unsplash.com/photo-1504307651254-35680f356f90?q=80&w=2000&auto=format&fit=crop" },
+  { id: "c14", name: "Outdoor Tiles", nameAr: "بلاط خارجي", slug: "outdoor-tiles", description: "Durable and weather-resistant outdoor tiles.", descriptionAr: "بلاط خارجي متين ومقاوم للعوامل الجوية.", image: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=400&auto=format&fit=crop", banner: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=2000&auto=format&fit=crop" }
 ];
 
 export const PRODUCTS_DATA: Product[] = [
   {
     id: "p1",
-    sku: "VADO-IND-100",
-    name: "Individual Brushed Gold Basin Mixer",
-    slug: "individual-brushed-gold-basin-mixer",
+    sku: "VAD-IND-101",
+    name: "VADO Individual Basin Mixer",
+    slug: "vado-individual-basin-mixer-gold",
     brandId: "b1",
-    categoryId: "c1",
-    collection: "Individual Elements",
-    series: "Individual",
-    shortDescription: "Premium single lever basin mixer with an elegant knurled detail.",
-    description: "The Individual collection represents the pinnacle of bespoke bathroom design. This premium single lever basin mixer features an elegant knurled detail and is finished in brushed gold, bringing a touch of luxury to any modern bathroom.",
-    features: ["H2Eco Technology for water saving", "Ceramic Cartridge for smooth operation", "Knurled Accent on the handle", "Solid brass construction"],
-    technicalSpecifications: "Minimum operating pressure: 1.0 bar. Flow rate at 3.0 bar: 5 l/min.",
+    categoryId: "c6",
+    collection: "Individual",
+    series: "VADO Individual",
+    shortDescription: "Premium single lever basin mixer featuring knurled details.",
+    description: "The VADO Individual Basin Mixer brings unparalleled luxury to your bathroom. With its intricate knurled detailing and flawless brushed gold finish, it stands out as a masterpiece of design and functionality.",
+    features: ["Single lever operation", "Water-saving aerator", "Ceramic cartridge technology", "Knurled accent details"],
+    technicalSpecifications: "Min operating pressure: 1.0 bar\nMax operating pressure: 5.0 bar\nFlow rate: 5 l/min at 3 bar",
     material: "Brass",
-    finish: ["Brushed Gold", "Chrome", "Brushed Black"],
-    color: ["Gold"],
-    dimensions: "160mm (H) x 140mm (D) x 45mm (W)",
+    finish: ["Brushed Gold", "Brushed Black", "Chrome"],
+    color: ["Gold", "Black", "Silver"],
+    dimensions: "H 150mm x W 50mm x D 120mm",
     weight: "1.2 kg",
     installationType: ["Deck Mounted"],
-    application: ["Residential", "Commercial", "Hospitality"],
-    warranty: "12 Years Guarantee",
-    images: ["https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1000&auto=format&fit=crop", "https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=1000&auto=format&fit=crop"],
+    application: ["Bathroom", "Washroom"],
+    warranty: "15 Years",
+    images: [
+      "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=800&auto=format&fit=crop"
+    ],
     thumbnail: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=400&auto=format&fit=crop",
-    documents: [
-      { id: "d1", title: "Technical Datasheet", type: "Technical Sheet", url: "#" },
-      { id: "d2", title: "Installation Guide", type: "Installation Guide", url: "#" }
-    ],
-    variants: [
-      { id: "v1", sku: "VADO-IND-100-BG", finish: "Brushed Gold", color: "Gold" },
-      { id: "v2", sku: "VADO-IND-100-CH", finish: "Chrome", color: "Silver" },
-      { id: "v3", sku: "VADO-IND-100-BK", finish: "Brushed Black", color: "Black" }
-    ],
-    status: "Available",
-    seoTitle: "VADO Individual Brushed Gold Basin Mixer | AZM Group",
-    seoDescription: "Shop the VADO Individual Brushed Gold Basin Mixer at AZM Group. Premium luxury bathroom mixer with knurled detail.",
-    relatedProducts: ["p2"]
+    documents: [],
+    variants: [],
+    status: 'Available',
+    seoTitle: "VADO Individual Basin Mixer - Brushed Gold | AZM Group",
+    seoDescription: "Buy the premium VADO Individual Basin Mixer in Brushed Gold. High quality deck mounted mixer.",
+    relatedProducts: []
   },
   {
     id: "p2",
-    sku: "VADO-SEN-200",
-    name: "Sensori Smart Touch Shower",
-    slug: "sensori-smart-touch-shower",
-    brandId: "b1",
+    sku: "RAK-SLB-001",
+    name: "RAK Maximus Marble Slab",
+    slug: "rak-maximus-marble-slab",
+    brandId: "b3",
     categoryId: "c2",
-    collection: "Sensori",
-    series: "Smart Showers",
-    shortDescription: "Digital shower control mapping with precision thermostatic control.",
-    description: "Sensori introduces a new era of showering with digital precision. Save your perfect temperature and flow settings for a personalized showering experience every time.",
-    features: ["Digital touch interface", "Memory presets for multiple users", "Anti-scald protection", "Wireless controller option"],
-    technicalSpecifications: "Minimum operating pressure: 1.5 bar.",
-    material: "Brass / Glass",
-    finish: ["Black Glass", "White Glass"],
-    color: ["Black", "White"],
-    dimensions: "200mm x 150mm x 10mm",
-    weight: "2.5 kg",
-    installationType: ["Wall Mounted", "Concealed"],
-    application: ["Residential", "Hospitality"],
-    warranty: "5 Years Guarantee",
-    images: ["https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=1000&auto=format&fit=crop"],
-    thumbnail: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=400&auto=format&fit=crop",
-    documents: [
-      { id: "d3", title: "Sensori Brochure", type: "Brochure", url: "#" }
+    collection: "Maximus",
+    series: "Marble Effect",
+    shortDescription: "Mega-slab porcelain tiles with stunning marble veining.",
+    description: "RAK Maximus slabs bring the beauty of natural marble into large format porcelain. Ideal for creating seamless walls, floors, or even countertops, these slabs offer durability without compromising on aesthetics.",
+    features: ["Stain resistant", "Scratch resistant", "UV resistant", "Frost proof"],
+    technicalSpecifications: "Thickness: 9mm\nWater Absorption: < 0.5%\nBreaking Strength: > 1300 N",
+    material: "Porcelain",
+    finish: ["Polished", "Matte"],
+    color: ["White", "Grey Veining"],
+    dimensions: "1200mm x 2400mm",
+    weight: "60 kg/slab",
+    installationType: ["Wall", "Floor", "Countertop"],
+    application: ["Indoor", "Outdoor", "Commercial", "Residential"],
+    warranty: "10 Years",
+    images: [
+      "https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=800&auto=format&fit=crop"
     ],
-    variants: [],
-    status: "Available",
-    seoTitle: "VADO Sensori Smart Touch Shower | AZM Group",
-    seoDescription: "Experience the ultimate in digital showering with the VADO Sensori Smart Touch Shower.",
-    relatedProducts: ["p1"]
-  },
-  {
-    id: "p3",
-    sku: "JAQ-ART-400",
-    name: "Artize Confluence Basin Mixer",
-    slug: "artize-confluence-basin-mixer",
-    brandId: "b2",
-    categoryId: "c1",
-    collection: "Artize",
-    series: "Confluence",
-    shortDescription: "Biomorphic design basin mixer inspired by nature.",
-    description: "The Confluence basin mixer channels water in a tranquil, natural flow, inspired by the movement of rivers.",
-    features: ["Natural water flow", "Biomorphic design", "Premium cartridge"],
-    technicalSpecifications: "Minimum operating pressure: 1.0 bar.",
-    material: "Brass",
-    finish: ["Chrome"],
-    color: ["Silver"],
-    dimensions: "180mm x 160mm x 50mm",
-    weight: "1.8 kg",
-    installationType: ["Deck Mounted"],
-    application: ["Residential", "Hospitality"],
-    warranty: "10 Years Guarantee",
-    images: ["https://images.unsplash.com/photo-1584622781564-1d987f7333c1?q=80&w=1000&auto=format&fit=crop"],
-    thumbnail: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?q=80&w=400&auto=format&fit=crop",
+    thumbnail: "https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=400&auto=format&fit=crop",
     documents: [],
     variants: [],
-    status: "Available",
-    seoTitle: "Jaquar Artize Confluence Basin Mixer | AZM Group",
-    seoDescription: "Luxury biomorphic basin mixer from Jaquar's Artize collection.",
+    status: 'Available',
+    seoTitle: "RAK Maximus Marble Slab | AZM Group",
+    seoDescription: "Premium large format RAK Maximus marble effect porcelain slabs.",
     relatedProducts: []
   }
 ];
 
-// Helper functions for easy data access
-export function getBrandBySlug(slug: string): Brand | undefined {
-  return BRANDS_DATA.find(b => b.slug === slug);
-}
-
-export function getProductsByBrand(brandId: string): Product[] {
-  return PRODUCTS_DATA.filter(p => p.brandId === brandId);
-}
-
-export function getProductBySlug(slug: string): Product | undefined {
-  return PRODUCTS_DATA.find(p => p.slug === slug);
-}
-
-export function getCategoryById(categoryId: string): Category | undefined {
-  return CATEGORIES_DATA.find(c => c.id === categoryId);
-}
-
-// Keep the old search function for backward compatibility or replace it
-export function searchProducts(query: string) {
-  if (!query) return [];
-  const lowerQuery = query.toLowerCase();
-  
-  return PRODUCTS_DATA.filter(product => 
-    (product.name || '').toLowerCase().includes(lowerQuery) ||
-    (product.sku || '').toLowerCase().includes(lowerQuery) ||
-    (product.collection || '').toLowerCase().includes(lowerQuery) ||
-    (product.series || '').toLowerCase().includes(lowerQuery)
-  );
-}
+export const getBrandBySlug = (slug: string) => BRANDS_DATA.find(b => b.slug === slug);
+export const getProductBySlug = (slug: string) => PRODUCTS_DATA.find(p => p.slug === slug);
+export const getCategoryById = (id: string) => CATEGORIES_DATA.find(c => c.id === id);
