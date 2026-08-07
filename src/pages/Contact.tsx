@@ -1,12 +1,30 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import { Mail, Phone, MapPin, MessageCircle, Clock, ArrowRight, Building, CheckCircle2 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { SEO } from "../components/SEO";
 import { createDocument } from '../services/db';
 
 export function Contact() {
-  const [activeTab, setActiveTab] = useState<"general" | "quote" | "showroom">("general");
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const initialTab = (searchParams.get('tab') as "general" | "quote" | "showroom") || "general";
+  const initialSku = searchParams.get('sku') || "";
+
+  const [activeTab, setActiveTab] = useState<"general" | "quote" | "showroom">(initialTab);
+  const [skuValue, setSkuValue] = useState(initialSku);
+
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab === 'quote' || tab === 'showroom' || tab === 'general') {
+      setActiveTab(tab);
+    }
+    const sku = searchParams.get('sku');
+    if (sku) {
+      setSkuValue(sku);
+    }
+  }, [location.search]);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -271,7 +289,7 @@ export function Contact() {
                           {activeTab === 'quote' && (
                             <div>
                               <label htmlFor="quoteProducts" className="block text-xs font-bold uppercase tracking-wider text-stone-500 mb-2">SKUs or Products of Interest</label>
-                              <input id="quoteProducts" name="quoteProducts" placeholder="e.g. VADO-IND-100" type="text" className="w-full bg-stone-50 border border-stone-200 rounded-lg px-4 py-3 focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 focus:bg-white transition-all" />
+                              <input id="quoteProducts" name="quoteProducts" value={skuValue} onChange={(e) => setSkuValue(e.target.value)} placeholder="e.g. VADO-IND-100" type="text" className="w-full bg-stone-50 border border-stone-200 rounded-lg px-4 py-3 focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 focus:bg-white transition-all" />
                             </div>
                           )}
 

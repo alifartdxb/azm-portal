@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import { Layout } from "./components/Layout";
 import { AuthProvider } from "./contexts/AuthContext";
+import { InquiryProvider } from "./contexts/InquiryContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
 const Home = lazy(() => import("./pages/Home").then(module => ({ default: module.Home })));
@@ -19,7 +20,9 @@ const Blog = lazy(() => import("./pages/Blog").then(module => ({ default: module
 const BlogDetail = lazy(() => import("./pages/BlogDetail").then(module => ({ default: module.BlogDetail })));
 const Catalogues = lazy(() => import("./pages/Catalogues").then(module => ({ default: module.Catalogues })));
 const GenericPage = lazy(() => import("./pages/GenericPage").then(module => ({ default: module.GenericPage })));
+const BookShowroom = lazy(() => import("./pages/BookShowroom").then(module => ({ default: module.BookShowroom })));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage").then(module => ({ default: module.NotFoundPage })));
+const Inquiry = lazy(() => import("./pages/Inquiry").then(module => ({ default: module.Inquiry })));
 const StyleGuide = lazy(() => import("./pages/StyleGuide").then(module => ({ default: module.StyleGuide })));
 
 // Admin Pages
@@ -32,6 +35,7 @@ const ProductImport = lazy(() => import("./pages/admin/products/ProductImport").
 const AdminBrands = lazy(() => import("./pages/admin/AdminBrands").then(module => ({ default: module.AdminBrands })));
 const AdminCategories = lazy(() => import("./pages/admin/AdminCategories").then(module => ({ default: module.AdminCategories })));
 const AdminSystem = lazy(() => import("./pages/admin/AdminSystem").then(module => ({ default: module.AdminSystem })));
+const AdminSettings = lazy(() => import("./pages/admin/AdminSettings").then(module => ({ default: module.AdminSettings })));
 const AdminTestimonials = lazy(() => import("./pages/admin/AdminTestimonials").then(module => ({ default: module.AdminTestimonials })));
 const AdminBlogs = lazy(() => import("./pages/admin/AdminBlogs").then(module => ({ default: module.AdminBlogs })));
 const AdminCatalogues = lazy(() => import("./pages/admin/catalogues/AdminCatalogues").then(module => ({ default: module.AdminCatalogues })));
@@ -50,6 +54,7 @@ const PageLoader = () => (
 export default function App() {
   return (
     <AuthProvider>
+      <InquiryProvider>
       <BrowserRouter>
         <Suspense fallback={<PageLoader />}>
           <Routes>
@@ -57,24 +62,66 @@ export default function App() {
             
             <Route element={<ProtectedRoute />}>
               <Route path="/admin" element={<AdminLayout />}>
+                {/* Everyone gets dashboard */}
                 <Route index element={<AdminDashboard />} />
-                <Route path="products" element={<ProductList />} />
-                <Route path="products/add" element={<ProductForm />} />
-                <Route path="products/edit/:id" element={<ProductForm />} />
-                <Route path="products/import" element={<ProductImport />} />
-                <Route path="brands" element={<AdminBrands />} />
-                <Route path="categories" element={<AdminCategories />} />
-                <Route path="testimonials" element={<AdminTestimonials />} />
-                <Route path="blogs" element={<AdminBlogs />} />
-                <Route path="catalogues" element={<AdminCatalogues />} />
-                <Route path="catalogues/add" element={<AdminCatalogueForm />} />
-                <Route path="catalogues/edit/:id" element={<AdminCatalogueForm />} />
-                <Route path="catalogues/import" element={<AdminCatalogueImport />} />
-                <Route path="media" element={<AdminGeneric />} />
-                <Route path="seo" element={<AdminGeneric />} />
-                <Route path="leads" element={<AdminLeads />} />
-            <Route path="system" element={<AdminSystem />} />
-                <Route path="users" element={<AdminUsers />} />
+
+                {/* Content Manager + SEO Manager */}
+                <Route element={<ProtectedRoute allowedRoles={['content_manager', 'seo_manager']} />}>
+                  <Route path="blogs" element={<AdminBlogs />} />
+                  <Route path="pages" element={<AdminGeneric />} />
+                </Route>
+
+                {/* Content Manager */}
+                <Route element={<ProtectedRoute allowedRoles={['content_manager']} />}>
+                  <Route path="products" element={<ProductList />} />
+                  <Route path="products/add" element={<ProductForm />} />
+                  <Route path="products/edit/:id" element={<ProductForm />} />
+                  <Route path="products/import" element={<ProductImport />} />
+                  <Route path="brands" element={<AdminBrands />} />
+                  <Route path="categories" element={<AdminCategories />} />
+                  <Route path="collections" element={<AdminGeneric />} />
+                  <Route path="attributes" element={<AdminGeneric />} />
+                  <Route path="applications" element={<AdminGeneric />} />
+                  <Route path="testimonials" element={<AdminTestimonials />} />
+                  <Route path="catalogues" element={<AdminCatalogues />} />
+                  <Route path="catalogues/add" element={<AdminCatalogueForm />} />
+                  <Route path="catalogues/edit/:id" element={<AdminCatalogueForm />} />
+                  <Route path="catalogues/import" element={<AdminCatalogueImport />} />
+                  <Route path="media" element={<AdminGeneric />} />
+                  <Route path="projects" element={<AdminGeneric />} />
+                  <Route path="gallery" element={<AdminGeneric />} />
+                  <Route path="videos" element={<AdminGeneric />} />
+                  <Route path="faqs" element={<AdminGeneric />} />
+                </Route>
+
+                {/* Sales Manager */}
+                <Route element={<ProtectedRoute allowedRoles={['sales_manager']} />}>
+                  <Route path="leads" element={<AdminLeads />} />
+                  <Route path="quotations" element={<AdminGeneric />} />
+                  <Route path="bookings" element={<AdminGeneric />} />
+                  <Route path="dealers" element={<AdminGeneric />} />
+                </Route>
+
+                {/* SEO Manager */}
+                <Route element={<ProtectedRoute allowedRoles={['seo_manager']} />}>
+                  <Route path="seo" element={<AdminGeneric />} />
+                  <Route path="analytics" element={<AdminGeneric />} />
+                  <Route path="redirects" element={<AdminGeneric />} />
+                </Route>
+
+                {/* Super Admin Only - no allowedRoles passed defaults to super_admin manually or we can pass empty but wait, ProtectedRoute defaults to checking if allowedRoles exists. If we don't pass it, anyone gets in. So we must pass ['super_admin'] */}
+                <Route element={<ProtectedRoute allowedRoles={['super_admin']} />}>
+                  <Route path="settings" element={<AdminSettings />} />
+                  <Route path="system" element={<AdminSystem />} />
+                  <Route path="users" element={<AdminUsers />} />
+                  <Route path="team" element={<AdminGeneric />} />
+                  <Route path="careers" element={<AdminGeneric />} />
+                  <Route path="emails" element={<AdminGeneric />} />
+                  <Route path="menus" element={<AdminGeneric />} />
+                  <Route path="integrations" element={<AdminGeneric />} />
+                  <Route path="audit-logs" element={<AdminGeneric />} />
+                </Route>
+
               </Route>
             </Route>
             
@@ -83,7 +130,7 @@ export default function App() {
               <Route path="products" element={<Products />} />
               <Route path="products/:brandSlug/:categorySlug/:productSlug" element={<ProductDetail />} />
               {/* Fallback for old routes or generic search */}
-              <Route path="products/:sku" element={<ProductDetail />} />
+              <Route path="products/:productSlug" element={<ProductDetail />} />
               
               <Route path="categories" element={<Categories />} />
               <Route path="categories/:categorySlug" element={<CategoryDetail />} />
@@ -93,6 +140,8 @@ export default function App() {
               <Route path="vado-collection" element={<VadoCollection />} />
               <Route path="sitemap" element={<SitemapViewer />} />
               <Route path="contact" element={<Contact />} />
+          <Route path="book-showroom" element={<BookShowroom />} />
+              <Route path="inquiry" element={<Inquiry />} />
               <Route path="about" element={<About />} />
               <Route path="catalogues" element={<Catalogues />} />
               <Route path="blog" element={<Blog />} />
@@ -104,6 +153,7 @@ export default function App() {
           </Routes>
         </Suspense>
       </BrowserRouter>
+      </InquiryProvider>
     </AuthProvider>
   );
 }

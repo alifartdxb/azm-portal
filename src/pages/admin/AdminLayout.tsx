@@ -17,7 +17,27 @@ import {
   Menu,
   X,
   LogOut,
-  Upload
+  Upload,
+  Layers,
+  Sliders,
+  LayoutGrid,
+  PenTool,
+  Image,
+  Video,
+  MessageSquare,
+  HelpCircle,
+  Download,
+  FileSignature,
+  Calendar,
+  Store,
+  UserCog,
+  Mail,
+  MenuSquare,
+  Plug,
+  History,
+  Database,
+  LinkIcon,
+  BarChart,
 } from "lucide-react";
 
 export function AdminLayout() {
@@ -35,19 +55,74 @@ export function AdminLayout() {
     }
   };
 
-  const navigation = [
-    { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
-    { name: "Products", href: "/admin/products", icon: Package },
-    { name: "Brands", href: "/admin/brands", icon: Tags },
-    { name: "Categories", href: "/admin/categories", icon: FolderTree },
-    
-    { name: "Blogs", href: "/admin/blogs", icon: FileText },
-    { name: "Media Library", href: "/admin/media", icon: ImageIcon },
-    { name: "SEO Manager", href: "/admin/seo", icon: Search },
-    { name: "Catalogues", href: "/admin/catalogues", icon: BookOpen },
-    { name: "Leads", href: "/admin/leads", icon: Users },
-    { name: "Users & Roles", href: "/admin/users", icon: Users },
-    { name: "System Tools", href: "/admin/system", icon: Settings },
+    const navigationGroups = [
+    {
+      title: "Overview",
+      items: [
+        { name: "Dashboard", href: "/admin", icon: LayoutDashboard }
+      ]
+    },
+    {
+      title: "Catalog",
+      items: [
+        { name: "Products", href: "/admin/products", icon: Package },
+        { name: "Categories", href: "/admin/categories", icon: FolderTree },
+        { name: "Brands", href: "/admin/brands", icon: Tags },
+        { name: "Collections", href: "/admin/collections", icon: Package },
+        { name: "Attributes", href: "/admin/attributes", icon: Settings },
+        { name: "Applications", href: "/admin/applications", icon: Package },
+      ]
+    },
+    {
+      title: "Content",
+      items: [
+        { name: "Pages", href: "/admin/pages", icon: FileText },
+        { name: "Blogs", href: "/admin/blogs", icon: FileText },
+        { name: "Projects", href: "/admin/projects", icon: Briefcase },
+        { name: "Gallery", href: "/admin/gallery", icon: ImageIcon },
+        { name: "Videos", href: "/admin/videos", icon: ImageIcon },
+        { name: "Testimonials", href: "/admin/testimonials", icon: Users },
+        { name: "FAQs", href: "/admin/faqs", icon: FileText },
+        { name: "Downloads", href: "/admin/catalogues", icon: BookOpen },
+      ]
+    },
+    {
+      title: "Sales & Leads",
+      items: [
+        { name: "Leads", href: "/admin/leads", icon: Users },
+        { name: "Quotation Requests", href: "/admin/quotations", icon: FileText },
+        { name: "Showroom Bookings", href: "/admin/bookings", icon: Users },
+        { name: "Dealers", href: "/admin/dealers", icon: Users },
+      ]
+    },
+    {
+      title: "Company",
+      items: [
+        { name: "Team", href: "/admin/team", icon: Users },
+        { name: "Careers", href: "/admin/careers", icon: Briefcase },
+      ]
+    },
+    {
+      title: "Marketing & SEO",
+      items: [
+        { name: "SEO", href: "/admin/seo", icon: Search },
+        { name: "Search Analytics", href: "/admin/analytics", icon: Search },
+        { name: "Redirects", href: "/admin/redirects", icon: Search },
+      ]
+    },
+    {
+      title: "System",
+      items: [
+        { name: "Media Library", href: "/admin/media", icon: ImageIcon },
+        { name: "Users and Roles", href: "/admin/users", icon: Users },
+        { name: "Email Templates", href: "/admin/emails", icon: FileText },
+        { name: "Website Settings", href: "/admin/settings", icon: Settings },
+        { name: "Menus", href: "/admin/menus", icon: Menu },
+        { name: "Integrations", href: "/admin/integrations", icon: Settings },
+        { name: "Audit Logs", href: "/admin/audit-logs", icon: FileText },
+        { name: "Backup Tools", href: "/admin/system", icon: Settings },
+      ]
+    }
   ];
 
   return (
@@ -59,30 +134,35 @@ export function AdminLayout() {
         </div>
         <div className="overflow-y-auto overflow-x-hidden flex-grow">
           <ul className="flex flex-col py-4 space-y-1">
-            <li className="px-5">
-              <div className="flex flex-row items-center h-8">
-                <div className="text-xs font-light tracking-wide text-stone-500 uppercase">Modules</div>
-              </div>
-            </li>
-            {navigation.map((item) => {
-              const isActive = location.pathname === item.href;
-              const Icon = item.icon;
-              return (
-                <li key={item.name}>
-                  <Link
-                    to={item.href}
-                    className={`relative flex flex-row items-center h-11 focus:outline-none hover:bg-stone-800 text-stone-300 hover:text-white border-l-4 border-transparent hover:border-brand-primary pr-6 ${
-                      isActive ? "bg-stone-800 text-white border-brand-primary" : ""
-                    }`}
-                  >
-                    <span className="inline-flex justify-center items-center ml-4">
-                      <Icon size={18} />
-                    </span>
-                    <span className="ml-2 text-sm tracking-wide truncate">{item.name}</span>
-                  </Link>
+            
+            {navigationGroups.map((group, gIdx) => (
+              <div key={gIdx} className="mb-4">
+                <li className="px-5">
+                  <div className="flex flex-row items-center h-8">
+                    <div className="text-xs font-bold tracking-wider text-stone-500 uppercase">{group.title}</div>
+                  </div>
                 </li>
-              );
-            })}
+                {group.items.map((item) => {
+                  const isActive = location.pathname === item.href;
+                  const Icon = item.icon;
+                  return (
+                    <li key={item.name}>
+                      <Link
+                        to={item.href}
+                        className={`relative flex flex-row items-center h-10 focus:outline-none hover:bg-stone-800 text-stone-300 hover:text-white border-l-4 border-transparent hover:border-brand-primary pr-6 ${
+                          isActive ? "bg-stone-800 text-white border-brand-primary" : ""
+                        }`}
+                      >
+                        <span className="inline-flex justify-center items-center ml-4">
+                          <Icon size={16} />
+                        </span>
+                        <span className="ml-2 text-[13px] tracking-wide truncate">{item.name}</span>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </div>
+            ))}
           </ul>
         </div>
         <div className="border-t border-stone-800 p-4">
@@ -105,26 +185,35 @@ export function AdminLayout() {
             </div>
             <div className="overflow-y-auto flex-grow">
               <ul className="flex flex-col py-4 space-y-1">
-                {navigation.map((item) => {
-                  const isActive = location.pathname === item.href;
-                  const Icon = item.icon;
-                  return (
-                    <li key={item.name}>
-                      <Link
-                        to={item.href}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className={`relative flex flex-row items-center h-11 focus:outline-none hover:bg-stone-800 text-stone-300 hover:text-white border-l-4 border-transparent hover:border-brand-primary pr-6 ${
-                          isActive ? "bg-stone-800 text-white border-brand-primary" : ""
-                        }`}
-                      >
-                        <span className="inline-flex justify-center items-center ml-4">
-                          <Icon size={18} />
-                        </span>
-                        <span className="ml-2 text-sm tracking-wide truncate">{item.name}</span>
-                      </Link>
+                {navigationGroups.map((group, gIdx) => (
+                  <div key={gIdx} className="mb-4">
+                    <li className="px-5">
+                      <div className="flex flex-row items-center h-8">
+                        <div className="text-xs font-bold tracking-wider text-stone-500 uppercase">{group.title}</div>
+                      </div>
                     </li>
-                  );
-                })}
+                    {group.items.map((item) => {
+                      const isActive = location.pathname === item.href;
+                      const Icon = item.icon;
+                      return (
+                        <li key={item.name}>
+                          <Link
+                            to={item.href}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className={`relative flex flex-row items-center h-10 focus:outline-none hover:bg-stone-800 text-stone-300 hover:text-white border-l-4 border-transparent hover:border-brand-primary pr-6 ${
+                              isActive ? "bg-stone-800 text-white border-brand-primary" : ""
+                            }`}
+                          >
+                            <span className="inline-flex justify-center items-center ml-4">
+                              <Icon size={16} />
+                            </span>
+                            <span className="ml-2 text-[13px] tracking-wide truncate">{item.name}</span>
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </div>
+                ))}
               </ul>
             </div>
           </div>

@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import fs from 'fs';
+
+const content = `import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Plus, Search, Filter, Upload, Download, MoreVertical, Edit, Trash2, Copy, AlertCircle, RefreshCw, Eye } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -65,8 +67,8 @@ export function ProductList() {
       const { id, ...productData } = product;
       const duplicatedData = {
         ...productData,
-        nameEn: `Copy - ${product.nameEn || product.name || ''}`,
-        sku: `${product.sku}-COPY`,
+        nameEn: \`Copy - \${product.nameEn || product.name || ''}\`,
+        sku: \`\${product.sku}-COPY\`,
         status: 'Draft',
         deleted: false,
         createdAt: new Date().toISOString()
@@ -88,14 +90,14 @@ export function ProductList() {
     const headers = ['id', 'sku', 'nameEn', 'brand', 'category', 'status', 'availabilityStatus'];
     const csvContent = [
       headers.join(','),
-      ...toExport.map(p => headers.map(h => `"${(p[h] || '').toString().replace(/"/g, '""')}"`).join(','))
-    ].join('\n');
+      ...toExport.map(p => headers.map(h => \`"\${(p[h] || '').toString().replace(/"/g, '""')}"\`).join(','))
+    ].join('\\n');
     
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', url);
-    link.setAttribute('download', `products-export-${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute('download', \`products-export-\${new Date().toISOString().split('T')[0]}.csv\`);
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
@@ -106,7 +108,7 @@ export function ProductList() {
     if (!bulkAction) return;
     
     if (bulkAction === 'delete') {
-      if (!window.confirm(`Are you sure you want to delete ${selectedProducts.length} products?`)) return;
+      if (!window.confirm(\`Are you sure you want to delete \${selectedProducts.length} products?\`)) return;
       for (const id of selectedProducts) {
         await updateDocument('products', id, { deleted: true });
       }
@@ -212,13 +214,13 @@ export function ProductList() {
       <div className="flex gap-4 border-b border-stone-200 pb-2">
         <button 
           onClick={() => { setFilterView('active'); setSelectedProducts([]); }}
-          className={`px-4 py-2 text-sm font-bold ${filterView === 'active' ? 'text-brand-primary border-b-2 border-brand-primary' : 'text-stone-500'}`}
+          className={\`px-4 py-2 text-sm font-bold \${filterView === 'active' ? 'text-brand-primary border-b-2 border-brand-primary' : 'text-stone-500'}\`}
         >
           Active Products
         </button>
         <button 
           onClick={() => { setFilterView('deleted'); setSelectedProducts([]); }}
-          className={`px-4 py-2 text-sm font-bold ${filterView === 'deleted' ? 'text-red-600 border-b-2 border-red-600' : 'text-stone-500'}`}
+          className={\`px-4 py-2 text-sm font-bold \${filterView === 'deleted' ? 'text-red-600 border-b-2 border-red-600' : 'text-stone-500'}\`}
         >
           Trash
         </button>
@@ -399,17 +401,17 @@ export function ProductList() {
                     <div className="text-xs text-stone-500 mt-0.5">{product.category || '-'}</div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className={`text-xs font-bold ${
+                    <span className={\`text-xs font-bold \${
                       product.availabilityStatus === 'Available' ? 'text-green-600' :
                       product.availabilityStatus === 'Out of Stock' ? 'text-red-600' :
                       'text-stone-500'
-                    }`}>{product.availabilityStatus || 'Available'}</span>
+                    }\`}>{product.availabilityStatus || 'Available'}</span>
                   </td>
                   <td className="px-6 py-4">
-                    <span className={`inline-block px-2 py-1 text-[10px] font-bold uppercase rounded ${
+                    <span className={\`inline-block px-2 py-1 text-[10px] font-bold uppercase rounded \${
                       product.status === 'Published' ? 'bg-green-100 text-green-700' : 
                       'bg-stone-100 text-stone-700'
-                    }`}>
+                    }\`}>
                       {product.status || 'Draft'}
                     </span>
                   </td>
@@ -418,7 +420,7 @@ export function ProductList() {
                       {filterView === 'active' ? (
                         <>
                           <Link 
-                            to={`/products/${product.slug || product.id}`}
+                            to={\`/products/\${product.slug || product.id}\`}
                             target="_blank"
                             className="p-1.5 text-stone-400 hover:text-brand-primary hover:bg-stone-100 rounded transition-colors"
                             title="Preview"
@@ -427,7 +429,7 @@ export function ProductList() {
                           </Link>
                           {/* We don't have copy handler fully implemented yet, but we'll leave icon */}
                           <Link 
-                            to={`/admin/products/edit/${product.id}`}
+                            to={\`/admin/products/edit/\${product.id}\`}
                             className="p-1.5 text-stone-400 hover:text-brand-primary hover:bg-stone-100 rounded transition-colors"
                             title="Edit"
                           >
@@ -501,3 +503,6 @@ export function ProductList() {
     </div>
   );
 }
+`;
+
+fs.writeFileSync('src/pages/admin/products/ProductList.tsx', content);

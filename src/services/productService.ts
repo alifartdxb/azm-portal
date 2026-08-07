@@ -170,3 +170,47 @@ export const getProductAggregates = async () => {
     status: Array.from(status).filter(Boolean)
   };
 };
+
+export const getProductBySlug = async (slug: string) => {
+  const snapshot = await getCachedProducts();
+  const allProducts = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as any));
+  return allProducts.find(p => p.slug === slug || p.sku === slug) || null;
+};
+
+export const getProductsByBrand = async (brandId: string) => {
+  const snapshot = await getCachedProducts();
+  const allProducts = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as any));
+  return allProducts.filter(p => (p.brandId === brandId || p.brand === brandId) && p.status !== 'Draft');
+};
+
+export const getProductsByCategory = async (categoryId: string) => {
+  const snapshot = await getCachedProducts();
+  const allProducts = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as any));
+  return allProducts.filter(p => (p.categoryId === categoryId || p.category === categoryId) && p.status !== 'Draft');
+};
+
+export const getRelatedProducts = async (product: any, limit = 4) => {
+  const snapshot = await getCachedProducts();
+  const allProducts = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as any));
+  
+  // If specific related products are set
+  if (product.relatedProducts && product.relatedProducts.length > 0) {
+    return allProducts.filter(p => product.relatedProducts.includes(p.id) || product.relatedProducts.includes(p.sku));
+  }
+  
+  // Fallback to same collection
+  if (product.collection) {
+    const sameCollection = allProducts.filter(p => p.collection === product.collection && p.id !== product.id && p.status !== 'Draft');
+    if (sameCollection.length > 0) return sameCollection.slice(0, limit);
+  }
+  
+  // Fallback to same category and brand
+  const similar = allProducts.filter(p => 
+    p.categoryId === product.categoryId && 
+    p.brandId === product.brandId && 
+    p.id !== product.id && 
+    p.status !== 'Draft'
+  );
+  
+  return similar.slice(0, limit);
+};

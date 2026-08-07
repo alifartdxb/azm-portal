@@ -114,7 +114,17 @@ export function AdminLeads() {
                         {lead.company && <div className="text-xs font-medium text-stone-500">{lead.company}</div>}
                       </td>
                       <td className="px-6 py-4 text-stone-600">
-                        {lead.productName ? (
+                        {lead.type === 'Product Inquiry' && lead.items ? (
+                           <>
+                             <div className="font-bold text-stone-700 text-xs">Multi-Product ({lead.items.length})</div>
+                             <div className="text-[10px] text-stone-400 uppercase tracking-wider">{lead.referenceNumber || 'Bulk'}</div>
+                           </>
+                        ) : lead.type === 'Showroom Visit' ? (
+                           <>
+                             <div className="font-bold text-stone-700 text-xs">Showroom Visit</div>
+                             <div className="text-[10px] text-stone-400 uppercase tracking-wider">{lead.preferredDate}</div>
+                           </>
+                        ) : lead.productName ? (
                            <>
                              <div className="font-bold text-stone-700 text-xs truncate max-w-[150px]">{lead.productName}</div>
                              <div className="text-[10px] text-stone-400 uppercase tracking-wider">{lead.sku}</div>
@@ -197,7 +207,28 @@ export function AdminLeads() {
                   {viewingLead.message || 'No message provided.'}
                 </div>
               </div>
-              {viewingLead.productName && (
+              {viewingLead.type === 'Product Inquiry' && viewingLead.items ? (
+                <div className="mt-4">
+                  <p className="text-xs text-stone-500 uppercase font-bold tracking-wider mb-2">Requested Products ({viewingLead.items.length})</p>
+                  <div className="space-y-3">
+                    {viewingLead.items.map((item: any, idx: number) => (
+                      <div key={idx} className="bg-stone-50 p-3 rounded-lg border border-stone-100 text-sm">
+                        <p className="font-bold text-stone-800 mb-1">{item.name}</p>
+                        <div className="grid grid-cols-2 gap-x-2 gap-y-1 text-xs text-stone-600">
+                          <div><span className="text-stone-400">SKU:</span> {item.sku}</div>
+                          <div><span className="text-stone-400">Qty:</span> {item.quantity} {item.unit}</div>
+                        </div>
+                        {item.notes && <p className="text-xs text-stone-500 mt-1 italic">Note: {item.notes}</p>}
+                      </div>
+                    ))}
+                  </div>
+                  {viewingLead.referenceNumber && (
+                    <div className="mt-4 text-xs font-bold text-stone-500">
+                      Ref: {viewingLead.referenceNumber}
+                    </div>
+                  )}
+                </div>
+              ) : viewingLead.productName && (
                 <div className="bg-stone-50 p-4 rounded-lg border border-stone-100 mt-4">
                   <p className="text-xs text-stone-500 uppercase font-bold tracking-wider mb-2">Product Inquiry Details</p>
                   <p className="font-medium text-stone-800 text-sm mb-1">{viewingLead.productName}</p>
@@ -207,9 +238,6 @@ export function AdminLeads() {
                     {viewingLead.quantity && <div><span className="text-stone-400">Qty:</span> {viewingLead.quantity}</div>}
                     {viewingLead.projectName && <div><span className="text-stone-400">Project:</span> {viewingLead.projectName}</div>}
                   </div>
-                  {viewingLead.productUrl && (
-                    <a href={viewingLead.productUrl} target="_blank" rel="noreferrer" className="text-xs text-brand-primary hover:underline mt-2 inline-block">View Product Page</a>
-                  )}
                 </div>
               )}
             </div>

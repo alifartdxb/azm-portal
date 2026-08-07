@@ -15,6 +15,8 @@ import { CATEGORIES_DATA } from "../data";
 import { PredictiveSearch } from "./PredictiveSearch";
 import { AnalyticsManager } from "./AnalyticsManager";
 import { InquiryModal } from "./InquiryModal";
+import { InquiryWidget } from "./InquiryWidget";
+import { FloatingContact } from "./FloatingContact";
 
 export function Layout() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -252,28 +254,10 @@ export function Layout() {
         <Outlet />
       </main>
 
+      <FloatingContact />
+      <InquiryWidget />
       {/* Floating Action Buttons for Lead Gen */}
-      <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
-        <button
-          onClick={() => setIsInquiryModalOpen(true)}
-          className="w-14 h-14 bg-stone-900 text-white rounded-full flex items-center justify-center shadow-xl hover:scale-105 transition-transform group relative"
-          title="Product Inquiry"
-        >
-          <Mail size={24} />
-          <span className="absolute right-full mr-4 bg-stone-900 text-white px-3 py-1.5 text-xs font-medium rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-            Request Inquiry
-          </span>
-        </button>
-        <a href="https://wa.me/971558090292" target="_blank" rel="noopener noreferrer"
-          className="w-14 h-14 bg-green-500 text-white rounded-full flex items-center justify-center shadow-xl hover:scale-105 transition-transform group relative"
-          title="WhatsApp Order"
-        >
-          <MessageCircle size={28} />
-          <span className="absolute right-full mr-4 bg-stone-900 text-white px-3 py-1.5 text-xs font-medium rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-            WhatsApp Order
-          </span>
-        </a>
-      </div>
+      
 
       {/* Footer */}
       <footer className="bg-brand-secondary text-brand-light/80 py-16 lg:py-24 border-t border-brand-secondary/80">

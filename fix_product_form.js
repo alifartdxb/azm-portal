@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import fs from 'fs';
+
+const content = `import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Save, ArrowLeft, Upload, CheckCircle, Plus, Trash2 } from 'lucide-react';
 import { getDocument, createDocument, updateDocument, getCollection } from '../../../services/db';
@@ -213,7 +215,7 @@ export function ProductForm() {
               {isEdit ? 'Edit Product' : 'Add New Product'}
             </h1>
             <p className="text-stone-500 text-sm">
-              {isEdit ? `Editing ${formData.nameEn || formData.sku}` : 'Fill in the details to create a new product.'}
+              {isEdit ? \`Editing \${formData.nameEn || formData.sku}\` : 'Fill in the details to create a new product.'}
             </p>
           </div>
         </div>
@@ -256,11 +258,11 @@ export function ProductForm() {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                className={\`w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors \${
                   activeTab === tab 
                     ? 'bg-brand-primary/10 text-brand-primary' 
                     : 'text-stone-600 hover:bg-stone-50'
-                }`}
+                }\`}
               >
                 {tab}
               </button>
@@ -434,7 +436,7 @@ export function ProductForm() {
                 <div>
                   <label className="block text-sm font-bold text-stone-700 mb-2">Product Images (comma separated URLs for now)</label>
                   <textarea 
-                    value={formData.productImages.join(',\n')} 
+                    value={formData.productImages.join(',\\n')} 
                     onChange={(e) => setFormData(prev => ({...prev, productImages: e.target.value.split(',').map(s => s.trim()).filter(Boolean)}))}
                     rows={4} 
                     className="w-full border border-stone-200 rounded-lg px-4 py-2 focus:ring-1 focus:ring-brand-primary" 
@@ -461,7 +463,7 @@ export function ProductForm() {
                 <div>
                   <label className="block text-sm font-bold text-stone-700 mb-2">Catalogues (comma separated URLs)</label>
                   <textarea 
-                    value={formData.catalogues.join(',\n')} 
+                    value={formData.catalogues.join(',\\n')} 
                     onChange={(e) => setFormData(prev => ({...prev, catalogues: e.target.value.split(',').map(s => s.trim()).filter(Boolean)}))}
                     rows={3} className="w-full border border-stone-200 rounded-lg px-4 py-2 focus:ring-1 focus:ring-brand-primary" 
                   />
@@ -469,7 +471,7 @@ export function ProductForm() {
                 <div>
                   <label className="block text-sm font-bold text-stone-700 mb-2">Technical Documents (comma separated URLs)</label>
                   <textarea 
-                    value={formData.technicalDocuments.join(',\n')} 
+                    value={formData.technicalDocuments.join(',\\n')} 
                     onChange={(e) => setFormData(prev => ({...prev, technicalDocuments: e.target.value.split(',').map(s => s.trim()).filter(Boolean)}))}
                     rows={3} className="w-full border border-stone-200 rounded-lg px-4 py-2 focus:ring-1 focus:ring-brand-primary" 
                   />
@@ -543,3 +545,6 @@ export function ProductForm() {
     </div>
   );
 }
+`;
+
+fs.writeFileSync('src/pages/admin/products/ProductForm.tsx', content);

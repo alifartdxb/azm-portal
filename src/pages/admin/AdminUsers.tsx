@@ -32,7 +32,17 @@ export function AdminUsers() {
     }
   };
 
-  if (role !== 'admin' && role !== 'superadmin') {
+  const toggleUserStatus = async (userId: string, currentStatus: string) => {
+    try {
+      const newStatus = currentStatus === 'inactive' ? 'active' : 'inactive';
+      await updateDocument('users', userId, { status: newStatus });
+      loadUsers();
+    } catch (e) {
+      console.error("Failed to update status", e);
+    }
+  };
+
+  if (role !== 'super_admin') {
     return (
       <div className="flex flex-col items-center justify-center h-64 text-center">
         <ShieldAlert size={48} className="text-red-500 mb-4" />
@@ -59,6 +69,7 @@ export function AdminUsers() {
                 <th className="px-6 py-4 font-bold">User</th>
                 <th className="px-6 py-4 font-bold">Email</th>
                 <th className="px-6 py-4 font-bold">Role</th>
+                <th className="px-6 py-4 font-bold">Status</th>
                 <th className="px-6 py-4 font-bold text-right">Actions</th>
               </tr>
             </thead>
@@ -87,19 +98,30 @@ export function AdminUsers() {
                       <select
                         value={u.role || 'viewer'}
                         onChange={(e) => handleRoleChange(u.id, e.target.value)}
-                        disabled={role !== 'superadmin' && u.role === 'superadmin'}
+                        disabled={role !== 'super_admin'}
                         className="bg-stone-100 border-none rounded-lg px-3 py-1 text-sm text-stone-700 font-medium focus:ring-2 focus:ring-brand-primary cursor-pointer"
                       >
-                        <option value="viewer">Viewer</option>
-                        <option value="editor">Editor</option>
-                        <option value="admin">Admin</option>
-                        <option value="superadmin">Super Admin</option>
+                        <option value="viewer">Viewer (Read-only)</option>
+                        <option value="content_manager">Content Manager</option>
+                        <option value="sales_manager">Sales Manager</option>
+                        <option value="seo_manager">SEO Manager</option>
+                        <option value="super_admin">Super Admin</option>
                       </select>
                     </td>
+                    <td className="px-6 py-4">
+                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-bold uppercase ${u.status === 'inactive' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
+                        {u.status === 'inactive' ? 'Inactive' : 'Active'}
+                      </span>
+                    </td>
                     <td className="px-6 py-4 text-right">
-                      <button className="text-stone-400 hover:text-stone-600 p-1 rounded-md hover:bg-stone-100">
-                        <MoreVertical size={18} />
-                      </button>
+                      <div className="flex justify-end gap-2">
+                        <button 
+                          onClick={() => toggleUserStatus(u.id, u.status)}
+                          className={`text-xs px-2 py-1 rounded font-bold uppercase ${u.status === 'inactive' ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'}`}
+                        >
+                          {u.status === 'inactive' ? 'Activate' : 'Deactivate'}
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))

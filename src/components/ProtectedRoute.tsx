@@ -1,9 +1,14 @@
 import React from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { Unauthorized } from '../pages/admin/auth/Unauthorized';
 
-export const ProtectedRoute = () => {
-  const { user, loading } = useAuth();
+interface ProtectedRouteProps {
+  allowedRoles?: string[];
+}
+
+export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
+  const { user, role, status, loading, logout } = useAuth();
   const location = useLocation();
 
   if (loading) {
@@ -16,6 +21,19 @@ export const ProtectedRoute = () => {
 
   if (!user) {
     return <Navigate to="/admin/login" state={{ from: location }} replace />;
+  }
+
+  if (status === 'inactive') {
+    // If inactive, maybe auto logout or just redirect to login with a message
+    logout();
+    return <Navigate to="/admin/login" state={{ from: location, error: "Your account has been deactivated." }} replace />;
+  }
+
+  if (allowedRoles && role) {
+    // super_admin always has access
+    if (role !== 'super_admin' && !allowedRoles.includes(role)) {
+      return <Unauthorized />;
+    }
   }
 
   return <Outlet />;

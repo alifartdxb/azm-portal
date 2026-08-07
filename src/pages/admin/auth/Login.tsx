@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { auth, db } from '../../../firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import { useNavigate, Navigate } from 'react-router-dom';
@@ -11,6 +11,7 @@ export function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [resetMessage, setResetMessage] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   
@@ -20,6 +21,24 @@ export function Login() {
   if (user) {
     return <Navigate to="/admin" />;
   }
+
+    const handleResetPassword = async () => {
+    if (!email) {
+      setError('Please enter your email address first.');
+      return;
+    }
+    setLoading(true);
+    setError('');
+    setResetMessage('');
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setResetMessage('Password reset link sent to your email.');
+    } catch (err: any) {
+      setError(err.message || 'Failed to send reset email.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,7 +52,7 @@ export function Login() {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         // Set default role to viewer, first user can manually be upgraded in Firestore
         // Or if email matches our admin email, make them admin
-        const role = email.includes('admin') ? 'superadmin' : 'viewer';
+        const role = email.includes('admin') || email.includes('alifartdxb') ? 'super_admin' : 'viewer';
         await setDoc(doc(db, 'users', userCredential.user.uid), {
           email: userCredential.user.email,
           role: role,
@@ -60,6 +79,12 @@ export function Login() {
         </div>
         
         <div className="p-8 pt-6">
+          {resetMessage && (
+            <div className="bg-green-50 text-green-600 p-3 rounded-lg flex items-start gap-2 text-sm mb-6 border border-green-100">
+              <span className="mt-0.5 flex-shrink-0">✓</span>
+              <span>{resetMessage}</span>
+            </div>
+          )}
           {error && (
             <div className="bg-red-50 text-red-600 p-3 rounded-lg flex items-start gap-2 text-sm mb-6 border border-red-100">
               <AlertCircle size={16} className="mt-0.5 flex-shrink-0" />
@@ -86,7 +111,7 @@ export function Login() {
             <div>
               <div className="flex justify-between items-center mb-2">
                 <label className="block text-sm font-bold text-stone-700">Password</label>
-                {isLogin && <button type="button" className="text-xs font-bold text-brand-primary hover:underline">Forgot?</button>}
+                {isLogin && <button type="button" onClick={handleResetPassword} className="text-xs font-bold text-brand-primary hover:underline">Forgot?</button>}
               </div>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
