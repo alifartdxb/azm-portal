@@ -57,6 +57,7 @@ const FAQs = lazy(() => import("./pages/FAQs").then(module => ({ default: module
 const Careers = lazy(() => import("./pages/Careers").then(module => ({ default: module.Careers })));
 const ProductFinder = lazy(() => import("./pages/ProductFinder").then(module => ({ default: module.ProductFinder })));
 const ProductComparison = lazy(() => import("./pages/ProductComparison").then(module => ({ default: module.ProductComparison })));
+const LocationLanding = lazy(() => import("./pages/LocationLanding").then(module => ({ default: module.LocationLanding })));
 
 
 
@@ -163,6 +164,7 @@ export default function App() {
               <Route path="careers" element={<Careers />} />
               <Route path="product-finder" element={<ProductFinder />} />
               <Route path="compare" element={<ProductComparison />} />
+              <Route path="locations/:city" element={<LocationLanding />} />
               <Route path="sitemap" element={<SitemapViewer />} />
               <Route path="contact" element={<Contact />} />
           <Route path="book-showroom" element={<BookShowroom />} />

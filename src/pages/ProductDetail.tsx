@@ -117,6 +117,43 @@ export function ProductDetail() {
   const images = product.images && product.images.length > 0 ? product.images : [product.thumbnail || 'https://placehold.co/800'];
   const mainImage = images[activeImageIndex];
 
+  
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://www.azmgroup.ae/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Products",
+        "item": "https://www.azmgroup.ae/products"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": brandName || product.brand,
+        "item": `https://www.azmgroup.ae/brands/${brandSlug}`
+      },
+      {
+        "@type": "ListItem",
+        "position": 4,
+        "name": categoryName || product.category,
+        "item": `https://www.azmgroup.ae/categories/${categorySlug}`
+      },
+      {
+        "@type": "ListItem",
+        "position": 5,
+        "name": productName
+      }
+    ]
+  };
+
   const schema = {
     "@context": "https://schema.org/",
     "@type": "Product",
@@ -136,10 +173,14 @@ export function ProductDetail() {
 
   return (
     <div className={`flex-grow flex flex-col bg-white pb-20 ${isRtl ? 'font-arabic text-right' : 'text-left'}`} dir={isRtl ? 'rtl' : 'ltr'}>
-      <SEO 
-        title={`${productName} | ${brandName} | AZM Group`}
-        description={product.shortDescription || product.description || `Buy ${productName} by ${brandName} from AZM Group.`}
-        schemas={[schema]}
+            <SEO 
+        title={product.seoTitleEn || product.seoTitle || `${productName} | ${brandName} | AZM Group`}
+        description={product.metaDescriptionEn || product.seoDescription || product.shortDescription || product.description || `Buy ${productName} by ${brandName} from AZM Group.`}
+        canonical={product.canonicalUrl || undefined}
+        type={product.schemaType === 'Article' ? 'article' : 'product'}
+        image={product.ogImage || images[0] || undefined}
+        schemas={[schema, breadcrumbSchema]}
+        index={product.index !== false}
       />
 
       {/* Breadcrumbs */}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { ChevronDown } from 'lucide-react';
+import { SEO } from '../components/SEO';
 import { getCollection } from '../services/db';
 
 export function FAQs() {
@@ -17,8 +18,28 @@ export function FAQs() {
 
   const categories = [...new Set(faqs.map((f: any) => f.category))];
 
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map((f: any) => ({
+      "@type": "Question",
+      "name": f.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": f.answer
+      }
+    }))
+  };
+
   return (
     <div className="pt-32 pb-24 bg-stone-50 min-h-screen">
+      <SEO 
+        title="Frequently Asked Questions | AZM Group"
+        description="Find answers to common questions about premium building materials, sanitary ware, tiles, and our delivery services in the UAE."
+        schemas={[faqSchema]}
+      />
+
       <div className="container mx-auto px-6 max-w-3xl">
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-display font-bold text-brand-secondary mb-6">Frequently Asked Questions</h1>
