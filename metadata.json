@@ -1,0 +1,8 @@
+{
+  "name": "AZM Group B2B Platform",
+  "description": "Premium B2B non-ecommerce catalog for AZM Group in the UAE, featuring VADO UK.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
