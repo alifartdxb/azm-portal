@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import * as XLSX from 'xlsx';
 import { getCollection, createDocument } from '../../../services/db';
-import { db } from '../../../firebase';
-import { doc, setDoc } from 'firebase/firestore';
+
+
 
 export function ProductImport() {
   const [file, setFile] = useState<File | null>(null);

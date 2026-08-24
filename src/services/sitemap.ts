@@ -1,20 +1,19 @@
-import { db } from '../firebase';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { getCollection } from './db';
 
 export async function fetchSitemapData() {
   const [products, categories, brands, blogs, projects] = await Promise.all([
-    getDocs(query(collection(db, 'products'), where('status', '==', 'Published'))).catch(() => ({ docs: [] })),
-    getDocs(query(collection(db, 'categories'), where('status', '==', 'Published'))).catch(() => ({ docs: [] })),
-    getDocs(query(collection(db, 'brands'), where('status', '==', 'Published'))).catch(() => ({ docs: [] })),
-    getDocs(query(collection(db, 'blogs'), where('status', '==', 'Published'))).catch(() => ({ docs: [] })),
-    getDocs(query(collection(db, 'projects'), where('status', '==', 'Published'))).catch(() => ({ docs: [] }))
+    getCollection('products'),
+    getCollection('categories'),
+    getCollection('brands'),
+    getCollection('blogs'),
+    getCollection('projects')
   ]);
 
   return {
-    products: products.docs.map(d => ({ id: d.id, ...d.data() })),
-    categories: categories.docs.map(d => ({ id: d.id, ...d.data() })),
-    brands: brands.docs.map(d => ({ id: d.id, ...d.data() })),
-    blogs: blogs.docs.map(d => ({ id: d.id, ...d.data() })),
-    projects: projects.docs.map(d => ({ id: d.id, ...d.data() }))
+    products: products.filter((p: any) => p.status === 'Published' || p.status === 'Active'),
+    categories: categories,
+    brands: brands,
+    blogs: blogs.filter((b: any) => b.status === 'Published'),
+    projects: projects.filter((p: any) => p.status === 'Published')
   };
 }

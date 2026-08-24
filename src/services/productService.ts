@@ -1,10 +1,4 @@
-import { db } from '../firebase';
-import { 
-  collection, 
-  getDocs,
-  DocumentSnapshot,
-  QuerySnapshot
-} from 'firebase/firestore';
+import { getApiUrl } from '../config/api';
 
 export interface ProductFilterParams {
   categories?: string[];
@@ -16,34 +10,34 @@ export interface ProductFilterParams {
   searchQuery?: string;
   sortBy?: string; // 'Recommended', 'Newest', 'A-Z', 'Z-A', 'Brand'
   pageSize: number;
-  lastDoc?: DocumentSnapshot | null;
+  lastDoc?: any | null; // Replaced DocumentSnapshot with any
 }
 
 // Memory cache for products to simulate fast indexed database
-let cachedSnapshot: QuerySnapshot | null = null;
+let cachedProducts: any[] | null = null;
 let lastCacheTime = 0;
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
 const getCachedProducts = async () => {
   const now = Date.now();
-  if (!cachedSnapshot || (now - lastCacheTime > CACHE_TTL)) {
-    const productsRef = collection(db, 'products');
-    cachedSnapshot = await getDocs(productsRef);
+  if (!cachedProducts || (now - lastCacheTime > CACHE_TTL)) {
+    const res = await fetch(getApiUrl('/products?limit=10000'));
+    if (!res.ok) throw new Error('Failed to fetch products');
+    const data = await res.json();
+    cachedProducts = data.data || [];
     lastCacheTime = now;
   }
-  return cachedSnapshot;
+  return cachedProducts;
 };
 
 export const clearProductsCache = () => {
-  cachedSnapshot = null;
+  cachedProducts = null;
 };
 
 // Fallback logic to fetch all and paginate client-side
 export const getProductsFiltered = async (params: ProductFilterParams) => {
   try {
-    const snapshot = await getCachedProducts();
-    
-    let allProducts = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as any));
+    let allProducts = await getCachedProducts();
     
     // Filter Drafts
     allProducts = allProducts.filter(p => p.status !== 'Draft');
@@ -96,7 +90,7 @@ export const getProductsFiltered = async (params: ProductFilterParams) => {
     if (params.sortBy) {
       switch (params.sortBy) {
         case 'Newest':
-          allProducts.sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
+          allProducts.sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime());
           break;
         case 'A-Z':
           allProducts.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
@@ -105,7 +99,7 @@ export const getProductsFiltered = async (params: ProductFilterParams) => {
           allProducts.sort((a, b) => (b.name || '').localeCompare(a.name || ''));
           break;
         case 'Brand':
-          allProducts.sort((a, b) => (a.brandId || '').localeCompare(b.brandId || ''));
+          allProducts.sort((a, b) => (a.brand_id || '').localeCompare(b.brand_id || ''));
           break;
         case 'Recommended':
           allProducts.sort((a, b) => (b.views || 0) - (a.views || 0));
@@ -113,7 +107,7 @@ export const getProductsFiltered = async (params: ProductFilterParams) => {
       }
     } else {
       // Default sort
-      allProducts.sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
+      allProducts.sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime());
     }
 
     // Find start index
@@ -128,8 +122,7 @@ export const getProductsFiltered = async (params: ProductFilterParams) => {
 
     let newLastDoc = null;
     if (paginatedData.length > 0) {
-      const lastItem = paginatedData[paginatedData.length - 1];
-      newLastDoc = snapshot.docs.find(d => d.id === lastItem.id) || null;
+      newLastDoc = paginatedData[paginatedData.length - 1];
     }
 
     return {
@@ -145,15 +138,15 @@ export const getProductsFiltered = async (params: ProductFilterParams) => {
 };
 
 export const getProductAggregates = async () => {
-  const snapshot = await getCachedProducts();
-  const allProducts = snapshot.docs.map(d => d.data() as any).filter(p => p.status !== 'Draft');
+  const allProducts = await getCachedProducts();
+  const validProducts = allProducts.filter(p => p.status !== 'Draft');
   
   const collections = new Set<string>();
   const materials = new Set<string>();
   const finishes = new Set<string>();
   const status = new Set<string>();
   
-  allProducts.forEach(p => {
+  validProducts.forEach(p => {
     if (p.collection) collections.add(p.collection);
     if (p.material) materials.add(p.material);
     if (p.status) status.add(p.status);
@@ -172,26 +165,22 @@ export const getProductAggregates = async () => {
 };
 
 export const getProductBySlug = async (slug: string) => {
-  const snapshot = await getCachedProducts();
-  const allProducts = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as any));
+  const allProducts = await getCachedProducts();
   return allProducts.find(p => p.slug === slug || p.sku === slug) || null;
 };
 
 export const getProductsByBrand = async (brandId: string) => {
-  const snapshot = await getCachedProducts();
-  const allProducts = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as any));
-  return allProducts.filter(p => (p.brandId === brandId || p.brand === brandId) && p.status !== 'Draft');
+  const allProducts = await getCachedProducts();
+  return allProducts.filter(p => (p.brand_id === brandId || p.brand === brandId) && p.status !== 'Draft');
 };
 
 export const getProductsByCategory = async (categoryId: string) => {
-  const snapshot = await getCachedProducts();
-  const allProducts = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as any));
-  return allProducts.filter(p => (p.categoryId === categoryId || p.category === categoryId) && p.status !== 'Draft');
+  const allProducts = await getCachedProducts();
+  return allProducts.filter(p => (p.category_id === categoryId || p.category === categoryId) && p.status !== 'Draft');
 };
 
 export const getRelatedProducts = async (product: any, limit = 4) => {
-  const snapshot = await getCachedProducts();
-  const allProducts = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as any));
+  const allProducts = await getCachedProducts();
   
   // If specific related products are set
   if (product.relatedProducts && product.relatedProducts.length > 0) {
@@ -206,8 +195,8 @@ export const getRelatedProducts = async (product: any, limit = 4) => {
   
   // Fallback to same category and brand
   const similar = allProducts.filter(p => 
-    p.categoryId === product.categoryId && 
-    p.brandId === product.brandId && 
+    p.category_id === product.category_id && 
+    p.brand_id === product.brand_id && 
     p.id !== product.id && 
     p.status !== 'Draft'
   );

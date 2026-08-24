@@ -9,7 +9,7 @@ export function Careers() {
   useEffect(() => {
     async function loadData() {
       const data = await getCollection('careers');
-      setJobs(data.filter(j: any => j.status === 'Active'));
+      setJobs(data.filter((j: any) => j.status === 'Active'));
     }
     loadData();
   }, []);

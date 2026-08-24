@@ -11,7 +11,7 @@ import { OptimizedImage } from "../components/OptimizedImage";
 import { getCollection } from "../services/db";
 import { FilterSection } from "../components/FilterSection";
 import { getProductsFiltered, getProductAggregates, ProductFilterParams } from "../services/productService";
-import { DocumentSnapshot } from "firebase/firestore";
+
 
 function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);

@@ -1,7 +1,12 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, onAuthStateChanged, signOut } from 'firebase/auth';
-import { auth, db } from '../firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { getApiUrl } from '../config/api';
+
+export interface User {
+  id: string | number;
+  email: string;
+  name?: string;
+  role_id?: number;
+}
 
 interface AuthContextType {
   user: User | null;
@@ -9,9 +14,17 @@ interface AuthContextType {
   status: string | null;
   loading: boolean;
   logout: () => Promise<void>;
+  login: (token: string, userData: User) => void;
 }
 
-const AuthContext = createContext<AuthContextType>({ user: null, role: null, status: null, loading: true, logout: async () => {} });
+const AuthContext = createContext<AuthContextType>({ 
+  user: null, 
+  role: null, 
+  status: null, 
+  loading: true, 
+  logout: async () => {},
+  login: () => {}
+});
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -20,44 +33,70 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser);
-      if (currentUser) {
-        try {
-          if (currentUser.email === 'alifartdxb@gmail.com') {
-            setRole('super_admin');
-            setStatus('active');
-          } else {
-            const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
-            if (userDoc.exists()) {
-              const data = userDoc.data();
-              setRole(data.role);
-              setStatus(data.status || 'active');
-            } else {
-              setRole('viewer');
-              setStatus('active');
-            }
-          }
-        } catch (e) {
-          console.error("Failed to fetch user role", e);
-          setRole('viewer');
-        }
-      } else {
-        setRole(null);
-        setStatus(null);
+    const checkAuth = async () => {
+      const token = localStorage.getItem('azm_token');
+      if (!token) {
+        setLoading(false);
+        return;
       }
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
+      try {
+        const response = await fetch(getApiUrl('/auth'), {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data.user);
+          // Map role ID to role name for the UI
+          const roleMap: Record<number, string> = {
+            1: 'super_admin',
+            2: 'content_manager',
+            3: 'sales_manager',
+            4: 'seo_manager',
+            5: 'viewer'
+          };
+          setRole(roleMap[data.user.role_id] || 'viewer');
+          setStatus('active');
+        } else {
+          localStorage.removeItem('azm_token');
+        }
+      } catch (e) {
+        console.error("Auth check failed", e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    checkAuth();
   }, []);
 
+  const login = (token: string, userData: User) => {
+    localStorage.setItem('azm_token', token);
+    setUser(userData);
+    const roleMap: Record<number, string> = {
+      1: 'super_admin',
+      2: 'content_manager',
+      3: 'sales_manager',
+      4: 'seo_manager',
+      5: 'viewer'
+    };
+    setRole(roleMap[userData.role_id || 5]);
+    setStatus('active');
+  };
+
   const logout = async () => {
-    await signOut(auth);
+    localStorage.removeItem('azm_token');
+    setUser(null);
+    setRole(null);
+    setStatus(null);
+    try {
+      await fetch(getApiUrl('/auth?action=logout'), { method: 'POST' });
+    } catch(e) {}
   };
 
   return (
-    <AuthContext.Provider value={{ user, role, status, loading, logout }}>
+    <AuthContext.Provider value={{ user, role, status, loading, logout, login }}>
       {children}
     </AuthContext.Provider>
   );

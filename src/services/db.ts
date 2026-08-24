@@ -1,48 +1,61 @@
-import { db } from '../firebase';
-import { 
-  collection, 
-  getDocs, 
-  getDoc, 
-  doc, 
-  setDoc, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc, 
-  query, 
-  where,
-  orderBy
-} from 'firebase/firestore';
+import { getApiUrl } from '../config/api';
 
-// Generic CRUD operations
+// Helper for fetch with auth header
+const apiFetch = async (url: string, options: RequestInit = {}) => {
+  const token = localStorage.getItem('azm_token');
+  const headers = {
+    'Content-Type': 'application/json',
+    ...options.headers,
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+  };
+  
+  const response = await fetch(url, { ...options, headers });
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.error || 'API request failed');
+  }
+  return response.json();
+};
+
 export const getCollection = async (collectionName: string) => {
-  const querySnapshot = await getDocs(collection(db, collectionName));
-  return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  try {
+    const data = await apiFetch(getApiUrl(`/${collectionName}`));
+    // Handle paginated responses vs arrays
+    return Array.isArray(data) ? data : (data.data || []);
+  } catch (err) {
+    console.error(`Error fetching collection ${collectionName}:`, err);
+    return [];
+  }
 };
 
 export const getDocument = async (collectionName: string, id: string) => {
-  const docRef = doc(db, collectionName, id);
-  const docSnap = await getDoc(docRef);
-  if (docSnap.exists()) {
-    return { id: docSnap.id, ...docSnap.data() };
+  try {
+    return await apiFetch(getApiUrl(`/${collectionName}?id=${id}`));
+  } catch (err) {
+    console.error(`Error fetching document ${id} from ${collectionName}:`, err);
+    return null;
   }
-  return null;
 };
 
 export const createDocument = async (collectionName: string, data: any, id?: string) => {
-  if (id) {
-    await setDoc(doc(db, collectionName, id), data);
-    return id;
-  } else {
-    const docRef = await addDoc(collection(db, collectionName), data);
-    return docRef.id;
-  }
+  const payload = { ...data };
+  if (id) payload.id = id;
+  const res = await apiFetch(getApiUrl(`/${collectionName}`), {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  });
+  return res.id || id;
 };
 
 export const updateDocument = async (collectionName: string, id: string, data: any) => {
-  const docRef = doc(db, collectionName, id);
-  await updateDoc(docRef, data);
+  await apiFetch(getApiUrl(`/${collectionName}?id=${id}`), {
+    method: 'PUT',
+    body: JSON.stringify(data)
+  });
 };
 
 export const deleteDocument = async (collectionName: string, id: string) => {
-  await deleteDoc(doc(db, collectionName, id));
+  await apiFetch(getApiUrl(`/${collectionName}?id=${id}`), {
+    method: 'DELETE'
+  });
 };

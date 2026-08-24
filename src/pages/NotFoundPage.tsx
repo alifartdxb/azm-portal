@@ -1,43 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { SEO } from '../components/SEO';
-import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../firebase';
 import { Search, Loader2 } from 'lucide-react';
 
 export function NotFoundPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [checking, setChecking] = useState(true);
-
-  useEffect(() => {
-    async function checkRedirect() {
-      try {
-        const path = location.pathname;
-        const q = query(collection(db, 'redirects'), where('source', '==', path), where('status', '==', 'active'));
-        const snap = await getDocs(q);
-        
-        if (!snap.empty) {
-          const redirect = snap.docs[0].data();
-          window.location.replace(redirect.destination); // Using replace to avoid history loops
-          return;
-        }
-
-        // If no redirect, log 404
-        await addDoc(collection(db, 'broken_links'), {
-          path: location.pathname,
-          referrer: document.referrer || '',
-          timestamp: new Date().toISOString(),
-          userAgent: navigator.userAgent,
-          resolved: false
-        });
-      } catch (err) {}
-      setChecking(false);
-    }
-    checkRedirect();
-  }, [location.pathname, navigate]);
-
-  if (checking) return <div className="min-h-screen flex justify-center pt-32"><Loader2 className="animate-spin text-brand-primary" size={32} /></div>;
 
   return (
     <>

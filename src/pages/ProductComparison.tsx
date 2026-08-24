@@ -162,7 +162,7 @@ export function ProductComparison() {
                       const brandSlug = p.brand?.toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'brand';
                       const catSlug = p.category?.toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'category';
                       const pSlug = p.slug || p.sku || p.id;
-                      const link = \`/products/${brandSlug}/${catSlug}/${pSlug}\`;
+                      const link = `/products/${brandSlug}/${catSlug}/${pSlug}`;
                       
                       return (
                       <th key={p.id} className="p-6 bg-white border-b border-r border-stone-200 align-top w-64 relative group">
